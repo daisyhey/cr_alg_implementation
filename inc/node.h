@@ -12,7 +12,7 @@ using std::list;
 class node
 {
     public:
-        node(){}
+        node():source(false){}
 
         void enqueue_package(const package& p)
         {
@@ -36,8 +36,19 @@ class node
             }
             return (cost);
         }
+        
+        bool is_source() const
+        {
+            return (this->source);
+        }
+        
+        void set_as_source()
+        {
+            source = true;
+        }
 
     private:
+        bool source;
         list<package> package_q;
 };
 

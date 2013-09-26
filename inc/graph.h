@@ -62,7 +62,7 @@ class Graph
                 {
                     /* something really bad happend here ... */;
                     cout << "how could it be happened!\n";
-                    throw (void*)(NULL);
+                    throw ("iterator cannot be found.");
                 }
 
                 /* safe zone */
@@ -70,18 +70,30 @@ class Graph
             }
         }
 
-        T1& get_node_ref_with_key(const T2& key) const
+        T1& get_node_ref_with_key(const T2& key)
         {
-            for (typename list <pair<T2, T1> >::iterator iter = node_list.begin(); iter != iter.end(); ++iter)
+            for (typename list <pair<T2, T1> >::iterator iter = node_list.begin(); iter != node_list.end(); ++iter)
             {
                 if (iter->first == key)
                 {
                     return (iter->second);
                 }
             }
-            return (T1());
+            throw ("key is not found in key list.");
         }
-
+        
+        list<T2> get_node_list() const
+        {
+            list<T2> r_val;
+            
+            for (typename list <pair<T2, T1> >::const_iterator i = node_list.begin(); i != node_list.end(); ++i)
+            {
+                r_val.push_back(i->first);
+            }
+            
+            return (r_val);
+        }
+        
     private:
 
         typename list <pair<T2, list<T2> > >::iterator get_graph_elem_iter(const T2& key)
