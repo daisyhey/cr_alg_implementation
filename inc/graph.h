@@ -7,7 +7,9 @@
 #include <list>
 #include <utility>
 
+using std::ostream;
 using std::cout;
+using std::endl;
 using std::list;
 using std::pair;
 
@@ -15,8 +17,27 @@ template <class T1, class T2>
 class Graph
 {
     public:
+        
+        friend ostream& operator<< (ostream& os, const Graph& g)
+        {
+            for (typename list <pair<T2, list<T2> > >::const_iterator iter = g.key_list.begin(); 
+                 iter != g.key_list.end(); 
+                 ++iter)
+            {
+                os << iter->first << " : ";
+                for (typename list<T2>::const_iterator k = iter->second.begin(); k != iter->second.end(); ++k)
+                {
+                    os << *k << " ";
+                }
+                os << endl;
+            }
+            os << endl;
+
+            return (os);
+        }
+        
         Graph(){}
-        Graph(list <pair <T2,T2> > vertex_pairs)
+        Graph(list <pair <T2,T2> >& vertex_pairs)
         {
             for (typename list <pair <T2,T2> >::iterator iter = vertex_pairs.begin(); iter != vertex_pairs.end(); ++iter)
             {
@@ -29,7 +50,7 @@ class Graph
                     pair<T2, T1> new_node;
 
                     new_key.first = iter->first;
-                    new_node.second = iter->first;
+                    new_node.first = iter->first;
 
                     key_list.push_back(new_key);
                     node_list.push_back(new_node);
@@ -63,9 +84,9 @@ class Graph
 
     private:
 
-        typename list <pair<T2, list<T2> > >::iterator get_graph_elem_iter(const T2& key) const
+        typename list <pair<T2, list<T2> > >::iterator get_graph_elem_iter(const T2& key)
         {
-            for (typename list <pair<T2, list<T2> > >::iterator iter = key_list.begin(); iter != iter.end(); ++iter)
+            for (typename list <pair<T2, list<T2> > >::iterator iter = key_list.begin(); iter != key_list.end(); ++iter)
             {
                 if (iter->first == key)
                 {
@@ -78,7 +99,7 @@ class Graph
 
         bool find_in_graph_list(const T2& key) const
         {
-            for (typename list <pair<T2, list<T2> > >::iterator iter = key_list.begin(); iter != iter.end(); ++iter)
+            for (typename list <pair<T2, list<T2> > >::const_iterator iter = key_list.begin(); iter != key_list.end(); ++iter)
             {
                 if (iter->first == key)
                 {
