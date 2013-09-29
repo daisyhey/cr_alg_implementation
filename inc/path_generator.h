@@ -6,11 +6,14 @@
 #include <stdlib.h>
 #include <time.h>
 
+#include <iostream>
 #include <list>
 #include <utility>
 
 using std::list;
 using std::pair;
+using std::cout;
+using std::endl;
 
 class path_generator
 {
@@ -61,10 +64,94 @@ class path_generator
                 }
             }
 
+            normalize_node_labels(r_list);
+
             return (r_list);
         }
 
     private:
+
+        void print_paths(list<list<unsigned int> > paths) const
+        {
+            for (list<list<unsigned int > >::iterator i = paths.begin(); i != paths.end(); ++i)
+            {
+                cout << "path: ";
+                for (list<unsigned int>::iterator k = i->begin(); k != i->end(); ++k)
+                {
+                    cout << *k << " ";
+                }
+                cout << endl;
+            }
+            cout << endl;
+        }
+
+        void normalize_node_labels(list<list<unsigned int> >& paths) const
+        {
+            int x;
+            unsigned int original, candidate;
+
+            original = candidate = 0;
+
+            while (-1 != (x = get_smallest_value_with_thershold(paths,original)))
+            {
+                original = (unsigned int)x;
+                /* symbols are matched look for next one */
+                if (original == candidate)
+                {
+                    ;
+                }
+                else if (original > candidate)
+                {
+                    replace_value(paths, original, candidate);
+                }
+                else
+                {
+                    cout << "something went wrong!" << endl;
+                    return;
+                }
+
+                original++;
+                candidate++;
+            }
+        }
+
+        void replace_value(list<list<unsigned int> >& paths, unsigned int a, unsigned int b) const
+        {
+            for(list<list<unsigned int> >::iterator i = paths.begin(); i != paths.end(); ++i)
+            {
+                for (list<unsigned int>::iterator k = i->begin(); k != i->end(); ++k)
+                {
+                    if (*k == a)
+                    {
+                        *k = b;
+                    }
+                }
+            }
+            return;
+        }
+
+        int get_smallest_value_with_thershold(list<list<unsigned int> >& paths, unsigned int v) const
+        {
+            int r_val = this->_max_node + 1;
+
+            for(list<list<unsigned int> >::iterator i = paths.begin(); i != paths.end(); ++i)
+            {
+                for (list<unsigned int>::iterator k = i->begin(); k != i->end(); ++k)
+                {
+                    if ((*k >= v) && (r_val > (int)*k))
+                    {
+                        r_val = (int)*k;
+                    }
+                }
+            }
+
+            if (r_val == (this->_max_node + 1))
+            {
+                r_val = -1;
+            }
+
+            return (r_val);
+        }
 
         bool check_same_exit(list<unsigned int>& l, unsigned int key) const
         {
