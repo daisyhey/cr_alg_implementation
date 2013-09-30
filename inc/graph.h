@@ -9,6 +9,7 @@
 #include <utility>
 
 #include "node.h"
+#include "frequency_informer.h"
 
 using std::ostream;
 using std::cout;
@@ -48,8 +49,7 @@ class Graph
             return (os);
         }
         
-        Graph(){}
-        Graph(list <pair <unsigned int,unsigned int> >& vertex_pairs)
+        Graph(list <pair <unsigned int,unsigned int> >& vertex_pairs, frequency_informer& freq_informer)
         {
             for (list <pair <unsigned int,unsigned int> >::iterator iter = vertex_pairs.begin(); iter != vertex_pairs.end(); ++iter)
             {
@@ -65,14 +65,14 @@ class Graph
                     new_node.first = iter->first;
 
                     key_list.push_back(new_key);
-                    nodes.push_back(node());
+                    nodes.push_back(node(new_key,freq_informer));
                 }
 
                 /* no worries here .... */
                 vertex = get_graph_elem_iter(iter->first);
                 if (vertex == key_list.end())
                 {
-                    /* something really bad happend here ... */;
+                    /* something really bad happened here ... */;
                     cout << "how could it be happened!\n";
                     throw ("iterator cannot be found.");
                 }
@@ -123,6 +123,7 @@ class Graph
             }
             return (false);
         }
+
         list <pair<unsigned int, list<unsigned int> > > key_list;
         vector <node> nodes;
 };
