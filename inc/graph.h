@@ -8,6 +8,8 @@
 #include <vector>
 #include <utility>
 
+#include "node.h"
+
 using std::ostream;
 using std::cout;
 using std::endl;
@@ -15,14 +17,13 @@ using std::list;
 using std::vector;
 using std::pair;
 
-template <class T1>
 class Graph
 {
     public:
         
         friend ostream& operator<< (ostream& os, const Graph& g)
         {
-            for (typename list <pair<unsigned int, list<unsigned int> > >::const_iterator iter = g.key_list.begin();
+            for (list <pair<unsigned int, list<unsigned int> > >::const_iterator iter = g.key_list.begin();
                  iter != g.key_list.end(); 
                  ++iter)
             {
@@ -36,7 +37,7 @@ class Graph
                     os << "      :";
                 }
 
-                for (typename list<unsigned int>::const_iterator k = iter->second.begin(); k != iter->second.end(); ++k)
+                for (list<unsigned int>::const_iterator k = iter->second.begin(); k != iter->second.end(); ++k)
                 {
                     os << *k << " ";
                 }
@@ -50,21 +51,21 @@ class Graph
         Graph(){}
         Graph(list <pair <unsigned int,unsigned int> >& vertex_pairs)
         {
-            for (typename list <pair <unsigned int,unsigned int> >::iterator iter = vertex_pairs.begin(); iter != vertex_pairs.end(); ++iter)
+            for (list <pair <unsigned int,unsigned int> >::iterator iter = vertex_pairs.begin(); iter != vertex_pairs.end(); ++iter)
             {
-                typename list <pair<unsigned int, list<unsigned int> > >::iterator vertex;
+                list <pair<unsigned int, list<unsigned int> > >::iterator vertex;
 
                 /* if not in the graph list, add it pls */
                 if (!find_in_graph_list(iter->first))
                 {
                     pair<unsigned int, list<unsigned int> > new_key;
-                    pair<unsigned int, T1> new_node;
+                    pair<unsigned int, node> new_node;
 
                     new_key.first = iter->first;
                     new_node.first = iter->first;
 
                     key_list.push_back(new_key);
-                    nodes.push_back(T1());
+                    nodes.push_back(node());
                 }
 
                 /* no worries here .... */
@@ -81,7 +82,7 @@ class Graph
             }
         }
 
-        T1& get_node_ref_with_key(const unsigned int& key)
+        node& get_node_ref_with_key(const unsigned int& key)
         {
             if (key > nodes.size())
             {
@@ -91,16 +92,16 @@ class Graph
             return (nodes[key]);
         }
         
-        vector<T1>& get_nodes()
+        vector<node>& get_nodes()
         {
             return (nodes);
         }
         
     private:
 
-        typename list <pair<unsigned int, list<unsigned int> > >::iterator get_graph_elem_iter(const unsigned int& key)
+        list <pair<unsigned int, list<unsigned int> > >::iterator get_graph_elem_iter(const unsigned int& key)
         {
-            for (typename list <pair<unsigned int, list<unsigned int> > >::iterator iter = key_list.begin(); iter != key_list.end(); ++iter)
+            for (list <pair<unsigned int, list<unsigned int> > >::iterator iter = key_list.begin(); iter != key_list.end(); ++iter)
             {
                 if (iter->first == key)
                 {
@@ -113,7 +114,7 @@ class Graph
 
         bool find_in_graph_list(const unsigned int& key) const
         {
-            for (typename list <pair<unsigned int, list<unsigned int> > >::const_iterator iter = key_list.begin(); iter != key_list.end(); ++iter)
+            for (list <pair<unsigned int, list<unsigned int> > >::const_iterator iter = key_list.begin(); iter != key_list.end(); ++iter)
             {
                 if (iter->first == key)
                 {
@@ -123,7 +124,7 @@ class Graph
             return (false);
         }
         list <pair<unsigned int, list<unsigned int> > > key_list;
-        vector <T1> nodes;
+        vector <node> nodes;
 };
 
 #endif /* _GRAPH_H_ */

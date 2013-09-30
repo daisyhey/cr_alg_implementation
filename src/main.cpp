@@ -16,15 +16,15 @@ using std::string;
 using std::list;
 using std::pair;
 
-Graph<node>* create_graph_from_file(string fname)
+Graph* create_graph_from_file(string fname)
 {
-    Graph<node>* r_val;
+    Graph* r_val;
     list<pair<unsigned int, bool> > sources;
 
     tgf_parser parser = tgf_parser(fname);
     parser.parse_tgf();
 
-    r_val = new Graph<node>(parser.get_pairs());
+    r_val = new Graph(parser.get_pairs());
 
     if (!r_val)
     {
@@ -47,7 +47,7 @@ Graph<node>* create_graph_from_file(string fname)
 
 int main(int argc, char* argv[])
 {
-    Graph<node>* graph_ptr;
+    Graph* graph_ptr;
     
     graph_ptr = create_graph_from_file(string(argv[1]));
     
