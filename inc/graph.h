@@ -59,13 +59,11 @@ class Graph
                 if (!find_in_graph_list(iter->first))
                 {
                     pair<unsigned int, list<unsigned int> > new_key;
-                    pair<unsigned int, node> new_node;
 
                     new_key.first = iter->first;
-                    new_node.first = iter->first;
 
                     key_list.push_back(new_key);
-                    nodes.push_back(node(new_key,freq_informer));
+                    nodes.push_back(node(iter->first,freq_informer));
                 }
 
                 /* no worries here .... */

@@ -43,6 +43,10 @@ class node
             source = true;
         }
 
+        node& operator= (const node& n)
+        {
+            *this = n;
+        }
     private:
 
         bool source;
